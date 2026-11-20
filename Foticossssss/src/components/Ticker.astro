@@ -1,0 +1,18 @@
+---
+interface Props {
+  items: string[];
+  updated: string;
+}
+const { items, updated } = Astro.props;
+---
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-set">
+      {items.map((t) => <span class="tick">★ {t}</span>)}
+    </div>
+    <div class="marquee-set" aria-hidden="true">
+      {items.map((t) => <span class="tick">★ {t}</span>)}
+    </div>
+  </div>
+  <div class="marquee-updated"><span class="dot"></span>LAST UPDATED: {updated}</div>
+</div>

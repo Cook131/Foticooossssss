@@ -1,0 +1,71 @@
+---
+---
+<dialog id="viewer" class="viewer" aria-label="Photo viewer">
+  <div class="winframe viewer-win">
+    <div class="titlebar">
+      <span><span data-f="file"></span> — viewer.exe (<span data-f="pos"></span>)</span>
+      <button type="button" class="lb-close" id="v-close" aria-label="Close viewer">×</button>
+    </div>
+    <div class="viewer-body">
+      <div class="viewer-stage"><img id="v-img" alt="" /></div>
+      <div class="viewer-side">
+        <div class="label"><span class="accent">▸</span> METADATA</div>
+        <dl>
+          <dt>FILE</dt><dd data-f="file"></dd>
+          <dt>DATE</dt><dd data-f="date"></dd>
+          <dt>PLACE</dt><dd data-f="place"></dd>
+          <dt>CAMERA</dt><dd data-f="camera"></dd>
+          <dt>LENS</dt><dd data-f="lens"></dd>
+          <dt>SETTINGS</dt><dd data-f="settings"></dd>
+          <dt>SHOT BY</dt><dd data-f="by"></dd>
+        </dl>
+        <p data-f="alt"></p>
+        <div class="viewer-nav">
+          <button type="button" class="raised lb-btn" id="v-prev" aria-label="Previous photo">◂ PREV</button>
+          <button type="button" class="raised lb-btn" id="v-next" aria-label="Next photo">NEXT ▸</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.getElementById("viewer") as HTMLDialogElement;
+  const img = document.getElementById("v-img") as HTMLImageElement;
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>(".photo-btn"));
+  const fields = ["file", "date", "place", "camera", "lens", "settings", "by"];
+  let idx = 0;
+
+  function setText(field: string, value: string) {
+    dialog.querySelectorAll(`[data-f="${field}"]`).forEach((el) => (el.textContent = value));
+  }
+
+  function show(i: number) {
+    idx = (i + buttons.length) % buttons.length;
+    const d = buttons[idx].dataset;
+    img.src = d.full ?? "";
+    img.alt = d.alt ?? "";
+    for (const f of fields) setText(f, d[f] || "—");
+    setText("alt", d.alt ?? "");
+    setText("pos", `${idx + 1} / ${buttons.length}`);
+  }
+
+  buttons.forEach((b, i) =>
+    b.addEventListener("click", () => {
+      show(i);
+      dialog.showModal();
+    })
+  );
+  document.getElementById("v-prev")!.addEventListener("click", () => show(idx - 1));
+  document.getElementById("v-next")!.addEventListener("click", () => show(idx + 1));
+  document.getElementById("v-close")!.addEventListener("click", () => dialog.close());
+  // Clic fuera de la ventana (sobre el fondo) cierra el visor.
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  dialog.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") show(idx - 1);
+    if (e.key === "ArrowRight") show(idx + 1);
+  });
+  dialog.addEventListener("close", () => img.removeAttribute("src"));
+</script>

@@ -1,0 +1,110 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import Win from "../components/Win.astro";
+import Ticker from "../components/Ticker.astro";
+import Atlas from "../components/Atlas.astro";
+import Lightbox from "../components/Lightbox.astro";
+import site from "../data/site.json";
+import { loadPhotos } from "../lib/photos";
+
+const photos = await loadPhotos();
+const updated = new Date().toISOString().slice(0, 10);
+const ticker = [
+  ...photos.slice(0, 3).map((p) => `${p.file.toUpperCase()} ADDED`),
+  `${photos.length} PHOTOS ONLINE`,
+  `SITE LAST UPDATED ${updated}`,
+  "MORE SOON",
+];
+const name = site.name;
+---
+<Layout>
+  <div class="page">
+    <div class="frame" id="top">
+      <div class="titlebar">
+        <span>[ {name.toUpperCase()} ].exe — grid.html</span>
+        <span aria-hidden="true" class="wm">—&nbsp;&nbsp;□&nbsp;&nbsp;×</span>
+      </div>
+
+      <Ticker items={ticker} updated={updated} />
+
+      <header class="head">
+        <h1 class="brand">[ {name} ]</h1>
+        <nav aria-label="Sections">
+          <a href="#top" class="raised pressed" aria-current="page">Grid</a>
+          <a href="#about" class="raised">About</a>
+          <a href="#atlas" class="raised">Atlas</a>
+        </nav>
+      </header>
+
+      <div class="section about">
+        <Win id="about" title="about.txt">
+          <p class="lead">
+            Hey, we're
+            <span class="name">{site.people[0]}</span>
+            &amp;
+            <span class="name">{site.people[1]}</span>.
+          </p>
+          <p class="sub">{site.about}</p>
+        </Win>
+      </div>
+
+      <div class="section-label"><span class="accent">▸</span> GRID — LATEST</div>
+
+      <div class="section">
+        {photos.length === 0 ? (
+          <p class="empty">No photos yet. Drop some into <code>src/photos</code> and commit.</p>
+        ) : (
+          <div class="cols">
+            {photos.map((p, i) => (
+              <div class="winframe-sm card">
+                <div class="titlebar small"><span>{p.file}</span><span aria-hidden="true">×</span></div>
+                <button
+                  type="button"
+                  class="photo-btn"
+                  aria-label={`Open ${p.file} full size`}
+                  data-file={p.file}
+                  data-full={p.full}
+                  data-alt={p.alt}
+                  data-date={p.date}
+                  data-place={p.place}
+                  data-camera={p.camera}
+                  data-lens={p.lens}
+                  data-settings={p.settings}
+                  data-by={p.by}
+                >
+                  <Image
+                    src={p.img}
+                    alt={p.alt}
+                    width={800}
+                    widths={[400, 800]}
+                    sizes="(min-width: 760px) 540px, 100vw"
+                    format="webp"
+                    loading={i < 2 ? "eager" : "lazy"}
+                  />
+                </button>
+                {(p.camera || p.settings || p.place || p.date) && (
+                  <div class="meta">
+                    <span>{[p.camera, p.settings].filter(Boolean).join(" · ")}</span>
+                    <span>{[p.place, p.date].filter(Boolean).join(" · ")}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div class="section">
+        <Atlas pins={site.pins} />
+      </div>
+
+      <footer class="foot">
+        <a href="#top" class="raised dark">[ TOP ]</a>
+        <span class="led">PHOTOS: {String(photos.length).padStart(4, "0")}</span>
+      </footer>
+    </div>
+  </div>
+
+  <Lightbox />
+</Layout>

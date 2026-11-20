@@ -1,0 +1,10 @@
+{
+  "name": "photo dump",
+  "accent": "#B8432B",
+  "people": ["Name One", "Name Two"],
+  "about": "This is where our photos land — film, digital, whatever's on the card. No filters, mostly unsorted.",
+  "pins": [
+    { "x": 850, "y": 140, "label": "TOKYO, JP" },
+    { "x": 246, "y": 196, "label": "RIVIERA MAYA, MX" }
+  ]
+}

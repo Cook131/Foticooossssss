@@ -1,0 +1,65 @@
+---
+import Win from "./Win.astro";
+
+interface Pin {
+  x: number;
+  y: number;
+  label: string;
+}
+interface Props {
+  pins: Pin[];
+}
+const { pins } = Astro.props;
+const label = pins.length
+  ? `Stylized world map with pins marking ${pins.map((p) => p.label).join(" and ")}`
+  : "Stylized world map";
+---
+<Win id="atlas" title="atlas.exe — roughly where we've been">
+  <svg viewBox="0 0 960 480" class="atlas" role="img" aria-label={label}>
+    <defs>
+      <pattern id="waterDither" width="6" height="6" patternUnits="userSpaceOnUse">
+        <rect width="6" height="6" fill="#E9EEF1"></rect>
+        <rect width="3" height="3" fill="#C9D7E2"></rect>
+        <rect x="3" y="3" width="3" height="3" fill="#C9D7E2"></rect>
+      </pattern>
+      <pattern id="landDither" width="4" height="4" patternUnits="userSpaceOnUse">
+        <rect width="4" height="4" fill="#201C14"></rect>
+        <rect width="2" height="2" fill="#3A362C"></rect>
+        <rect x="2" y="2" width="2" height="2" fill="#3A362C"></rect>
+      </pattern>
+      <pattern id="gridOverlay" width="80" height="80" patternUnits="userSpaceOnUse">
+        <path d="M0,0 H80 M0,0 V80" fill="none" stroke="#201C14" stroke-width="1" opacity="0.15"></path>
+      </pattern>
+    </defs>
+
+    <rect x="0" y="0" width="960" height="480" fill="url(#waterDither)"></rect>
+
+    <path d="M80,60 L60,90 L90,130 L120,150 L110,180 L130,200 L150,185 L170,210 L200,225 L228,230 L245,195 L270,165 L278,150 L268,130 L255,120 L290,100 L300,70 L270,45 L230,40 L180,35 L130,45 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="2"></path>
+    <path d="M232,234 L245,250 L270,245 L300,260 L320,290 L300,330 L290,360 L295,400 L280,430 L265,450 L255,420 L250,380 L245,340 L240,300 L235,260 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="2"></path>
+    <path d="M460,70 L450,50 L470,40 L490,30 L510,20 L530,15 L545,35 L525,55 L545,70 L520,85 L500,95 L515,120 L500,110 L480,100 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="2"></path>
+    <path d="M440,190 L450,160 L460,140 L500,130 L540,140 L560,160 L615,175 L600,200 L580,230 L570,270 L585,300 L560,330 L530,345 L500,320 L480,280 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="2"></path>
+    <path d="M595,275 L610,280 L608,305 L595,310 L588,290 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="1.5"></path>
+    <path d="M545,65 L560,40 L600,25 L680,20 L760,30 L820,50 L800,90 L770,110 L790,130 L760,150 L770,170 L750,190 L730,210 L710,190 L690,160 L685,220 L650,230 L620,210 L630,170 L600,140 L580,110 L560,90 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="2"></path>
+    <path d="M760,235 L780,230 L785,245 L765,250 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="1.5"></path>
+    <path d="M800,235 L820,230 L825,250 L805,255 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="1.5"></path>
+    <path d="M835,110 L855,100 L865,130 L858,160 L848,185 L838,165 L830,135 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="2"></path>
+    <path d="M780,300 L820,290 L850,300 L870,320 L880,345 L865,365 L840,375 L800,370 L770,345 L765,320 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="2"></path>
+    <path d="M858,385 L868,382 L870,395 L860,398 Z" fill="url(#landDither)" stroke="#201C14" stroke-width="1.5"></path>
+
+    <rect x="0" y="0" width="960" height="480" fill="url(#gridOverlay)"></rect>
+
+    {pins.map((p) => (
+      <g>
+        <circle cx={p.x} cy={p.y} r="14" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.6"></circle>
+        <circle cx={p.x} cy={p.y} r="6" fill="var(--accent)" stroke="#F6F0E2" stroke-width="2"></circle>
+      </g>
+    ))}
+  </svg>
+
+  <ul class="legend">
+    {pins.map((p) => (
+      <li><span class="dot"></span>{p.label}</li>
+    ))}
+  </ul>
+  <p class="note">pins are rough — placed by hand, not read from photo metadata.</p>
+</Win>
