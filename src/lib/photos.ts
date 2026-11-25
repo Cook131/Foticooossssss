@@ -41,7 +41,7 @@ export async function loadPhotos(): Promise<Photo[]> {
       return {
         file,
         img: mod.default,
-        full: (await getImage({ src: mod.default, width: 1600, format: "webp" })).src,
+        full: (await getImage({ src: mod.default, width: 1600, format: "webp", quality: 88 })).src,
         alt: meta.alt || fallbackAlt,
         camera: meta.camera ?? "",
         lens: meta.lens ?? "",

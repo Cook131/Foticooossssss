@@ -11,7 +11,7 @@ Galería hecha con Astro, desplegada en GitHub Pages. Diseño: sketchup de venta
 
 1. Nombra los originales `AAAA-MM-DD_descripcion.jpg` (la fecha define el orden y el texto alternativo).
 2. Redimensiona y convierte a webp: `npm run resize -- /ruta/a/originales`
-   (opcional: `[lado-largo-px] [calidad]`, por defecto 2200 y 80).
+   (opcional: `[lado-largo-px] [calidad]`, por defecto 2200 y 88).
 3. Abre los `.json` que se crearon en `src/photos` y rellena lo que quieras mostrar en el visor:
 
    ```json

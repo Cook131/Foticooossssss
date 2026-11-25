@@ -6,9 +6,9 @@ import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 
-const [, , inDir, maxSide = "2200", quality = "80"] = process.argv;
+const [, , inDir, maxSide = "2200", quality = "88"] = process.argv;
 if (!inDir) {
-  console.error("Uso: npm run resize -- <carpeta> [lado-largo-px=2200] [calidad=80]");
+  console.error("Uso: npm run resize -- <carpeta> [lado-largo-px=2200] [calidad=88]");
   process.exit(1);
 }
 
